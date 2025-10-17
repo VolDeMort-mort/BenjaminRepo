@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/css.css">
+    <title>Контакти - Бенджамін Франклін</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- НАВІГАЦІЯ -->
+    <header class="navbar">
+        <h1>Контакти</h1>
+        <nav>
+            <a href="index.html">ГОЛОВНА</a>
+            <a href="index.html#biography">БІОГРАФІЯ</a>
+            <a href="index.html#achievements">ДОСЯГНЕННЯ</a>
+            <a href="index.html#photos">ФОТО</a>
+            <a href="#contact-form">ЗВ'ЯЗАТИСЬ</a>
+        </nav>
+    </header>
+
+    <main class="contacts-main">
+        <!-- ГОЛОВНИЙ ЗАГОЛОВОК -->
+        <section class="contact-hero">
+            <h2>Зв'яжіться з нами</h2>
+            <p>Маєте питання про Бенджаміна Франкліна? Хочете дізнатися більше? Напишіть нам!</p>
+        </section>
+
+        <hr>
+
+        <!-- КОНТАКТНА ФОРМА -->
+        <section id="contact-form" class="form-section">
+            <h3>Форма зворотного зв'язку</h3>
+            
+            <form class="main-form" action="#" method="post">
+                <!-- Ім'я -->
+                <div class="form-group">
+                    <label for="name">Ваше ім'я *</label>
+                    <input type="text" 
+                           id="name" 
+                           name="name" 
+                           required 
+                           placeholder="Введіть ваше ім'я"
+                           pattern="[А-Яа-яІіЇїЄєҐґA-Za-z\s]{2,50}"
+                           title="Ім'я має містити тільки літери">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           required 
+                           placeholder="example@email.com">
+                </div>
+
+                <!-- Телефон -->
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" 
+                           id="phone" 
+                           name="phone" 
+                           placeholder="+380 XX XXX XX XX"
+                           pattern="[\+]?[0-9\s\-\(\)]{10,20}">
+                </div>
+
+                <!-- Тема звернення -->
+                <div class="form-group">
+                    <label for="subject">Тема звернення</label>
+                    <select id="subject" name="subject">
+                        <option value="">Оберіть тему</option>
+                        <option value="biography">Біографія Франкліна</option>
+                        <option value="science">Наукові досягнення</option>
+                        <option value="politics">Політична діяльність</option>
+                        <option value="quotes">Цитати та мудрість</option>
+                        <option value="other">Інше</option>
+                    </select>
+                </div>
+
+                <!-- Повідомлення -->
+                <div class="form-group">
+                    <label for="message">Ваше повідомлення *</label>
+                    <textarea id="message" 
+                              name="message" 
+                              rows="6" 
+                              required 
+                              placeholder="Напишіть ваше повідомлення тут..."
+                              minlength="10"
+                              maxlength="1000"></textarea>
+                    <small>Мінімум 10 символів, максимум 1000</small>
+                </div>
+
+                <!-- Чекбокс згоди -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="agreement" name="agreement" required>
+                    <label for="agreement">Я погоджуюсь на обробку персональних даних *</label>
+                </div>
+
+                <!-- Кнопки -->
+                <div class="form-buttons">
+                    <button type="submit" class="btn-submit">Відправити</button>
+                    <button type="reset" class="btn-reset">Очистити</button>
+                </div>
+            </form>
+        </section>
+
+        <!--Register-->
+        <section id="register-form" class="form-section">
+            <h3>Реєстрація</h3>
+        
+            <form class="main-form" action="#" method="post">    
+                
+                <!--Ім`я-->
+                <div class="form-group">
+                <label class="name">Ім`я</label>
+                    <input type="text" 
+                            id="name" 
+                            name="name" 
+                            required 
+                            placeholder="Введіть ваше ім'я"
+                            pattern="[А-Яа-яІіЇїЄєҐґA-Za-z\s]{2,50}"
+                            title="Ім'я має містити тільки літери">
+                </div>
+            
+                <!--Прізвище-->
+                <div class="form-group">
+                <label class="name">Прізвище</label>
+                    <input type="text" 
+                            id="surname" 
+                            name="surname" 
+                            required 
+                            placeholder="Введіть ваше прізвище"
+                            pattern="[А-Яа-яІіЇїЄєҐґA-Za-z\s]{2,50}"
+                            title="Ім'я має містити тільки літери">
+                </div>
+                
+                <!--Стать-->
+                <div class="form-group">
+                    <label for="subject">Стать</label>
+                    <select id="subject" name="subject">
+                        <option value="">Оберіть стать</option>
+                        <option value="man">Чоловіча</option>
+                        <option value="women">Жіноча</option>
+                        <option value="other">Інше</option>
+                    </select>
+                </div>
+
+                <!-- Телефон -->
+                <div class="form-group">
+                    <label for="phone">Телефон</label>
+                    <input type="tel" 
+                           id="phone" 
+                           name="phone" 
+                           placeholder="+380 XX XXX XX XX"
+                           pattern="[\+]?[0-9\s\-\(\)]{10,20}">
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           required 
+                           placeholder="example@email.com">
+                </div>
+
+                <!--Пароль-->
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password"
+                            id="password"
+                            name="password"
+                            required
+                            minlength="8"
+                            placeholder="Створіть пароль">
+                </div>    
+
+                <!-- Чекбокс згоди -->
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="agreement2" name="agreement2" required>
+                    <label for="agreement2">Я погоджуюсь на обробку персональних даних *</label>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn-submit">Відправити</button>
+                    <button type="reset" class="btn-reset">Очистити</button>
+                </div>
+
+            </form>         
+        </section>
+
+        <!--Вхід-->
+        <section id="login-form" class="form-section">
+            <h3>Вхід</h3>
+            <form class="main-form" action="#" method="post">
+                <!--Логін-->
+                <div class="form-group">
+                <label class="name">Логін</label>
+                    <input type="text" 
+                            id="name" 
+                            name="name" 
+                            required 
+                            placeholder="Введіть ваш логін"
+                            pattern="[А-Яа-яІіЇїЄєҐґA-Za-z0-9\s]{2,50}"
+                            title="Неправильно введений логін">
+                </div>
+
+                <!--Пароль-->
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password"
+                            id="password"
+                            name="password"
+                            required
+                            minlength="8"
+                            placeholder="Введіть пароль">
+                </div>
+                      
+                <div class="form-buttons">
+                    <button type="submit" class="btn-submit">Відправити</button>
+                </div>
+            </form>
+        </section>
+
+        <hr>
+
+        <!-- ФОРМА ПІДПИСКИ (Float layout) -->
+        <section class="newsletter-section">
+            <h3>Підпишіться на новини</h3>
+            <div class="newsletter-container">
+                <div class="newsletter-text">
+                    <h4>Отримуйте цікаві факти про Франкліна</h4>
+                    <p>Щотижневі листи з маловідомими історіями та цитатами великого американця</p>
+                </div>
+                <form class="newsletter-form">
+                    <input type="email" 
+                           placeholder="Ваш email" 
+                           required
+                           pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                    <button type="submit">Підписатись</button>
+                </form>
+            </div>
+        </section>
+
+        <hr>
+
+        <!-- ШВИДКИЙ ЗВ'ЯЗОК -->
+        <section class="quick-contact">
+            <h3>Швидкий зв'язок</h3>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <h5>📧 Email</h5>
+                    <p>volody4859@gmail.com</p>
+                </div>
+                <div class="contact-card">
+                    <h5>📱 Телефон</h5>
+                    <p>+380 99-999-99-99</p>
+                </div>
+                <div class="contact-card">
+                    <h5>📍 Адреса</h5>
+                    <p>Київ, Україна</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <h6><span>© Київ 2025</span></h6>
+        <h6><span>Телефон: +380 99-999-99-99</span></h6>
+        <h6><span>Email: volody4859@gmail.com</span></h6>
+    </footer>
+
+</body>
+</html>
