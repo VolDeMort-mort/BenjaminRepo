@@ -1,4 +1,3 @@
-// ========== КЛАСИ ==========
         
         // Базовий клас питання
         class Question {
@@ -13,12 +12,8 @@
                 return `<div class="question-text">${this.text}</div>`;
             }
 
-            // Цей метод зчитує дані з HTML і зберігає в this.userAnswer
-            captureAnswer() { 
-                // Базова реалізація
-            }
+            captureAnswer() { }
 
-            // Цей метод тільки перевіряє збережені дані
             checkAnswer() {
                 return false;
             }
@@ -28,7 +23,6 @@
             }
         }
 
-        // Питання з одиничним вибором
         class RadioQuestion extends Question {
             constructor(text, options, correctAnswer, points) {
                 super(text, 'radio', points);
@@ -37,7 +31,6 @@
             }
 
             render() {
-                // Якщо відповідь вже була збережена, відмічаємо її (checked)
                 const shuffled = this.shuffleArray([...this.options]);
                 return `
                     ${super.render()}
@@ -64,7 +57,6 @@
             }
 
             shuffleArray(array) {
-                /* Ваша логіка перемішування залишається */
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [array[i], array[j]] = [array[j], array[i]];
@@ -73,7 +65,6 @@
             }
         }
 
-        // Питання з множинним вибором
         class CheckboxQuestion extends Question {
             constructor(text, options, correctAnswers, points) {
                 super(text, 'checkbox', points);
@@ -118,7 +109,6 @@
             }
         }
 
-        // Питання з випадаючим списком
         class SelectQuestion extends Question {
             constructor(text, options, correctAnswer, points) {
                 super(text, 'select', points);
@@ -150,7 +140,6 @@
             }
         }
 
-        // Питання з написанням коду
         class CodeQuestion extends Question {
             constructor(text, correctAnswer, points) {
                 super(text, 'code', points);
@@ -178,24 +167,16 @@
             }
         }
 
-        // Питання Drag & Drop
         class DragDropQuestion extends Question {
             constructor(text, pairs, points) {
                 super(text, 'dragdrop', points);
                 this.pairs = pairs;
-                this.userAnswers = {}; // Тут зберігаємо пари
+                this.userAnswers = {};
             }
 
             render() {
                 const items = Object.keys(this.pairs);
-                // Важливо: тут ми не перемішуємо заново, якщо вже рендерили, але для спрощення залишимо так
-                // (у ідеальній реалізації порядок треба зберегти)
-                const shuffledItems = this.shuffleArray([...items]); 
-                
-                // Рендерінг складніший, бо треба відновити стан (де лежать елементи)
-                // Для простоти, якщо користувач повертається назад, DragDrop скидається або треба писати складну логіку відновлення DOM.
-                // У цій версії ми просто рендеримо заново.
-                
+                const shuffledItems = this.shuffleArray([...items]);                 
                 return `
                     ${super.render()}
                     <div class="drag-drop-container">
@@ -219,7 +200,6 @@
                 `;
             }
             
-            // Спеціальний метод для DragDrop, оскільки логіка збереження тут миттєва при події 'drop'
             setupDragDrop() {
                 const dragItems = document.querySelectorAll('.drag-item');
                 const dropZones = document.querySelectorAll('.drop-zone');
@@ -257,11 +237,7 @@
                 });
             }
 
-            captureAnswer() {
-                // Для DragDrop ми зберігаємо дані по ходу виконання в this.userAnswers,
-                // тому тут нічого робити не треба, або можна перевірити DOM ще раз.
-                // Але оскільки setupDragDrop пише прямо в this.userAnswers, залишаємо пустим.
-            }
+            captureAnswer() { }
 
             checkAnswer() {
                 let correct = 0;
@@ -282,13 +258,12 @@
             }
         }
 
-        // Питання на заповнення пропусків
         class FillBlankQuestion extends Question {
             constructor(text, template, blanks, points) {
                 super(text, 'fillblank', points);
                 this.template = template;
                 this.blanks = blanks;
-                this.userAnswer = []; // Масив відповідей
+                this.userAnswer = []; 
             }
 
             render() {
@@ -296,7 +271,6 @@
                 let template = this.template;
                 
                 this.blanks.forEach((blank, i) => {
-                    // Відновлюємо введене значення, якщо є
                     const val = this.userAnswer[i] || '';
                     template = template.replace('___', `<input type="text" class="blank-input" id="blank${this.id}_${i}" value="${val}" placeholder="...">`);
                 });
@@ -327,8 +301,7 @@
                 return correct === this.blanks.length;
             }
         }
-        // ========== БАНК ПИТАНЬ ==========
-        
+       
         const questionBank = {
             easy: [
                 new RadioQuestion(
@@ -655,7 +628,6 @@
         };
 
         // ========== КЛАС ТЕСТУ ==========
-        
         class Quiz {
             constructor() {
                 this.currentQuestionIndex = 0;
@@ -680,7 +652,6 @@
                     });
                 });
                 
-                // Виправлено getElementById
                 const backBtn = document.getElementById('backToSite');
                 if(backBtn) backBtn.addEventListener('click', () => this.backToMenu());
 
@@ -707,14 +678,12 @@
                 const pointsMap = { easy: 10, medium: 15, hard: 20 };
                 this.pointsPerQuestion = pointsMap[level];
                 const bank = questionBank[level];
-                // Клонуємо питання, щоб не зберігати старі відповіді при повторному проходженні
-                // Важливо: об'єкти в questionBank треба створювати заново або клонувати
-                // Тут ми просто беремо їх, але при retry треба буде чистити
+
                 this.questions = this.getRandomQuestions(bank, 10);
                 
                 this.questions.forEach((q, i) => {
                     q.id = i; 
-                    q.userAnswer = null; // Скидаємо відповіді
+                    q.userAnswer = null;
                     if(q.type === 'dragdrop') q.userAnswers = {};
                     if(q.type === 'fillblank') q.userAnswer = [];
                 });
@@ -769,7 +738,6 @@
             }
 
             prevQuestion() {
-                // Спочатку зберігаємо відповідь поточного питання
                 this.questions[this.currentQuestionIndex].captureAnswer();
                 
                 if (this.currentQuestionIndex > 0) {
@@ -780,7 +748,6 @@
             }
 
             nextQuestion() {
-                // Спочатку зберігаємо відповідь поточного питання
                 this.questions[this.currentQuestionIndex].captureAnswer();
 
                 if (this.currentQuestionIndex < this.questions.length - 1) {
@@ -798,14 +765,12 @@
             }
 
             submitQuiz() {
-                // Зберігаємо відповідь ОСТАННЬОГО питання перед перевіркою
                 this.questions[this.currentQuestionIndex].captureAnswer();
 
                 this.score = 0;
                 this.correctAnswers = 0;
 
                 this.questions.forEach(question => {
-                    // Тепер checkAnswer не дивиться в DOM, а дивиться в this.userAnswer
                     if (question.checkAnswer()) {
                         this.score += question.points;
                         this.correctAnswers++;
