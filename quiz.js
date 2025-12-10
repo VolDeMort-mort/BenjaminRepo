@@ -1,4 +1,4 @@
-        // ========== КЛАСИ ==========
+// ========== КЛАСИ ==========
         
         // Базовий клас питання
         class Question {
@@ -6,13 +6,19 @@
                 this.text = text;
                 this.type = type;
                 this.points = points;
-                this.userAnswer = null;
+                this.userAnswer = null; // Тут зберігається відповідь
             }
 
             render() {
                 return `<div class="question-text">${this.text}</div>`;
             }
 
+            // Цей метод зчитує дані з HTML і зберігає в this.userAnswer
+            captureAnswer() { 
+                // Базова реалізація
+            }
+
+            // Цей метод тільки перевіряє збережені дані
             checkAnswer() {
                 return false;
             }
@@ -31,13 +37,14 @@
             }
 
             render() {
+                // Якщо відповідь вже була збережена, відмічаємо її (checked)
                 const shuffled = this.shuffleArray([...this.options]);
                 return `
                     ${super.render()}
                     <div class="options">
                         ${shuffled.map((opt, i) => `
                             <label class="option">
-                                <input type="radio" name="q${this.id}" value="${opt}">
+                                <input type="radio" name="q${this.id}" value="${opt}" ${this.userAnswer === opt ? 'checked' : ''}>
                                 <span>${opt}</span>
                             </label>
                         `).join('')}
@@ -45,13 +52,19 @@
                 `;
             }
 
-            checkAnswer() {
+            captureAnswer() {
                 const selected = document.querySelector(`input[name="q${this.id}"]:checked`);
-                this.userAnswer = selected ? selected.value : null;
+                if (selected) {
+                    this.userAnswer = selected.value;
+                }
+            }
+
+            checkAnswer() {
                 return this.userAnswer === this.correctAnswer;
             }
 
             shuffleArray(array) {
+                /* Ваша логіка перемішування залишається */
                 for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [array[i], array[j]] = [array[j], array[i]];
@@ -75,7 +88,8 @@
                     <div class="options">
                         ${shuffled.map((opt, i) => `
                             <label class="option">
-                                <input type="checkbox" name="q${this.id}" value="${opt}">
+                                <input type="checkbox" name="q${this.id}" value="${opt}" 
+                                ${this.userAnswer && this.userAnswer.includes(opt) ? 'checked' : ''}>
                                 <span>${opt}</span>
                             </label>
                         `).join('')}
@@ -83,16 +97,20 @@
                 `;
             }
 
-            checkAnswer() {
+            captureAnswer() {
                 const selected = Array.from(document.querySelectorAll(`input[name="q${this.id}"]:checked`))
                     .map(cb => cb.value)
                     .sort();
                 this.userAnswer = selected;
-                return JSON.stringify(selected) === JSON.stringify(this.correctAnswers);
+            }
+
+            checkAnswer() {
+                if (!this.userAnswer) return false;
+                return JSON.stringify(this.userAnswer) === JSON.stringify(this.correctAnswers);
             }
 
             shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
+               for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [array[i], array[j]] = [array[j], array[i]];
                 }
@@ -113,14 +131,21 @@
                     ${super.render()}
                     <select id="select${this.id}">
                         <option value="">-- Оберіть відповідь --</option>
-                        ${this.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                        ${this.options.map(opt => 
+                            `<option value="${opt}" ${this.userAnswer === opt ? 'selected' : ''}>${opt}</option>`
+                        ).join('')}
                     </select>
                 `;
             }
 
-            checkAnswer() {
+            captureAnswer() {
                 const select = document.getElementById(`select${this.id}`);
-                this.userAnswer = select?.value ?? "";
+                if (select) {
+                    this.userAnswer = select.value;
+                }
+            }
+
+            checkAnswer() {
                 return this.userAnswer === this.correctAnswer;
             }
         }
@@ -135,13 +160,19 @@
             render() {
                 return `
                     ${super.render()}
-                    <textarea id="code${this.id}" placeholder="Напишіть ваш код тут..."></textarea>
+                    <textarea id="code${this.id}" placeholder="Напишіть ваш код тут...">${this.userAnswer || ''}</textarea>
                 `;
             }
 
-            checkAnswer() {
+            captureAnswer() {
                 const textarea = document.getElementById(`code${this.id}`);
-                this.userAnswer = textarea?.value ?? "";
+                if (textarea) {
+                    this.userAnswer = textarea.value;
+                }
+            }
+
+            checkAnswer() {
+                if (!this.userAnswer) return false;
                 const normalized = this.userAnswer.toLowerCase().replace(/\s+/g, '');
                 return normalized.includes(this.correctAnswer) || normalized === this.correctAnswer;
             }
@@ -151,13 +182,19 @@
         class DragDropQuestion extends Question {
             constructor(text, pairs, points) {
                 super(text, 'dragdrop', points);
-                this.pairs = pairs; // {item: 'answer'}
-                this.userAnswers = {};
+                this.pairs = pairs;
+                this.userAnswers = {}; // Тут зберігаємо пари
             }
 
             render() {
                 const items = Object.keys(this.pairs);
-                const shuffledItems = this.shuffleArray([...items]);
+                // Важливо: тут ми не перемішуємо заново, якщо вже рендерили, але для спрощення залишимо так
+                // (у ідеальній реалізації порядок треба зберегти)
+                const shuffledItems = this.shuffleArray([...items]); 
+                
+                // Рендерінг складніший, бо треба відновити стан (де лежать елементи)
+                // Для простоти, якщо користувач повертається назад, DragDrop скидається або треба писати складну логіку відновлення DOM.
+                // У цій версії ми просто рендеримо заново.
                 
                 return `
                     ${super.render()}
@@ -181,7 +218,8 @@
                     </div>
                 `;
             }
-
+            
+            // Спеціальний метод для DragDrop, оскільки логіка збереження тут миттєва при події 'drop'
             setupDragDrop() {
                 const dragItems = document.querySelectorAll('.drag-item');
                 const dropZones = document.querySelectorAll('.drop-zone');
@@ -191,7 +229,6 @@
                         e.dataTransfer.setData('text/plain', e.target.dataset.item);
                         e.target.classList.add('dragging');
                     });
-
                     item.addEventListener('dragend', (e) => {
                         e.target.classList.remove('dragging');
                     });
@@ -202,24 +239,28 @@
                         e.preventDefault();
                         zone.classList.add('drag-over');
                     });
-
                     zone.addEventListener('dragleave', () => {
                         zone.classList.remove('drag-over');
                     });
-
                     zone.addEventListener('drop', (e) => {
                         e.preventDefault();
                         zone.classList.remove('drag-over');
-                        
                         const item = e.dataTransfer.getData('text/plain');
                         const draggedElement = document.querySelector(`[data-item="${item}"]`);
                         
                         if (draggedElement && zone.children.length === 0) {
                             zone.appendChild(draggedElement);
+                            // Зберігаємо відповідь відразу
                             this.userAnswers[item] = zone.dataset.zone;
                         }
                     });
                 });
+            }
+
+            captureAnswer() {
+                // Для DragDrop ми зберігаємо дані по ходу виконання в this.userAnswers,
+                // тому тут нічого робити не треба, або можна перевірити DOM ще раз.
+                // Але оскільки setupDragDrop пише прямо в this.userAnswers, залишаємо пустим.
             }
 
             checkAnswer() {
@@ -231,9 +272,9 @@
                 }
                 return correct === Object.keys(this.pairs).length;
             }
-
+            
             shuffleArray(array) {
-                for (let i = array.length - 1; i > 0; i--) {
+               for (let i = array.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [array[i], array[j]] = [array[j], array[i]];
                 }
@@ -246,7 +287,8 @@
             constructor(text, template, blanks, points) {
                 super(text, 'fillblank', points);
                 this.template = template;
-                this.blanks = blanks; // [{answer: 'correct', alternatives: []}]
+                this.blanks = blanks;
+                this.userAnswer = []; // Масив відповідей
             }
 
             render() {
@@ -254,29 +296,37 @@
                 let template = this.template;
                 
                 this.blanks.forEach((blank, i) => {
-                    template = template.replace('___', `<input type="text" class="blank-input" id="blank${this.id}_${i}" placeholder="...">`);
+                    // Відновлюємо введене значення, якщо є
+                    const val = this.userAnswer[i] || '';
+                    template = template.replace('___', `<input type="text" class="blank-input" id="blank${this.id}_${i}" value="${val}" placeholder="...">`);
                 });
 
                 html += `<div class="code-editor">${template}</div>`;
                 return html;
             }
 
-            checkAnswer() {
-                let correct = 0;
+            captureAnswer() {
+                this.userAnswer = [];
                 this.blanks.forEach((blank, i) => {
                     const input = document.getElementById(`blank${this.id}_${i}`);
                     if (input) {
-                        const value = input.value.trim().toLowerCase();
-                        const answers = [blank.answer.toLowerCase(), ...(blank.alternatives || []).map(a => a.toLowerCase())];
-                        if (answers.includes(value)) {
-                            correct++;
-                        }
+                        this.userAnswer[i] = input.value;
+                    }
+                });
+            }
+
+            checkAnswer() {
+                let correct = 0;
+                this.blanks.forEach((blank, i) => {
+                    const val = (this.userAnswer[i] || '').trim().toLowerCase();
+                    const answers = [blank.answer.toLowerCase(), ...(blank.alternatives || []).map(a => a.toLowerCase())];
+                    if (answers.includes(val)) {
+                        correct++;
                     }
                 });
                 return correct === this.blanks.length;
             }
         }
-
         // ========== БАНК ПИТАНЬ ==========
         
         const questionBank = {
@@ -629,7 +679,10 @@
                         this.startQuiz(e.currentTarget.dataset.level);
                     });
                 });
-                document.getElementById('backToSite').addEventListener('click', ()=>this.backToMenu());
+                
+                // Виправлено getElementById
+                const backBtn = document.getElementById('backToSite');
+                if(backBtn) backBtn.addEventListener('click', () => this.backToMenu());
 
                 document.getElementById('prevBtn').addEventListener('click', () => this.prevQuestion());
                 document.getElementById('nextBtn').addEventListener('click', () => this.nextQuestion());
@@ -641,10 +694,8 @@
             handleLogin() {
                 this.studentName = document.getElementById('name').value;
                 this.studentGroup = document.getElementById('group').value;
-                
                 document.getElementById('studentName').textContent = this.studentName;
                 document.getElementById('studentGroup').textContent = this.studentGroup;
-                
                 this.showScreen('levelScreen');
             }
 
@@ -653,25 +704,23 @@
                 this.currentQuestionIndex = 0;
                 this.score = 0;
                 this.correctAnswers = 0;
-
-                // Встановлення балів
                 const pointsMap = { easy: 10, medium: 15, hard: 20 };
                 this.pointsPerQuestion = pointsMap[level];
-
-                // Вибір 10 випадкових питань з банку
                 const bank = questionBank[level];
+                // Клонуємо питання, щоб не зберігати старі відповіді при повторному проходженні
+                // Важливо: об'єкти в questionBank треба створювати заново або клонувати
+                // Тут ми просто беремо їх, але при retry треба буде чистити
                 this.questions = this.getRandomQuestions(bank, 10);
                 
-                // Присвоєння ID питанням
-                this.questions.forEach((q, i) => q.id = i);
+                this.questions.forEach((q, i) => {
+                    q.id = i; 
+                    q.userAnswer = null; // Скидаємо відповіді
+                    if(q.type === 'dragdrop') q.userAnswers = {};
+                    if(q.type === 'fillblank') q.userAnswer = [];
+                });
 
-                const levelNames = {
-                    easy: 'Початковий',
-                    medium: 'Середній',
-                    hard: 'Складний'
-                };
+                const levelNames = { easy: 'Початковий', medium: 'Середній', hard: 'Складний' };
                 document.getElementById('currentLevel').textContent = levelNames[level];
-
                 this.showScreen('quizScreen');
                 this.renderQuestion();
                 this.updateProgress();
@@ -696,7 +745,6 @@
                     </div>
                 `;
 
-                // Налаштування drag & drop якщо потрібно
                 if (question.type === 'dragdrop') {
                     setTimeout(() => question.setupDragDrop(), 100);
                 }
@@ -721,6 +769,9 @@
             }
 
             prevQuestion() {
+                // Спочатку зберігаємо відповідь поточного питання
+                this.questions[this.currentQuestionIndex].captureAnswer();
+                
                 if (this.currentQuestionIndex > 0) {
                     this.currentQuestionIndex--;
                     this.renderQuestion();
@@ -729,6 +780,9 @@
             }
 
             nextQuestion() {
+                // Спочатку зберігаємо відповідь поточного питання
+                this.questions[this.currentQuestionIndex].captureAnswer();
+
                 if (this.currentQuestionIndex < this.questions.length - 1) {
                     this.currentQuestionIndex++;
                     this.renderQuestion();
@@ -744,11 +798,14 @@
             }
 
             submitQuiz() {
-                // Перевірка всіх відповідей
+                // Зберігаємо відповідь ОСТАННЬОГО питання перед перевіркою
+                this.questions[this.currentQuestionIndex].captureAnswer();
+
                 this.score = 0;
                 this.correctAnswers = 0;
 
                 this.questions.forEach(question => {
+                    // Тепер checkAnswer не дивиться в DOM, а дивиться в this.userAnswer
                     if (question.checkAnswer()) {
                         this.score += question.points;
                         this.correctAnswers++;
@@ -773,7 +830,6 @@
                 const percentage = Math.round((this.score / maxScore) * 100);
                 document.getElementById('percentage').textContent = percentage + '%';
 
-                // Оцінка
                 let grade = '';
                 if (percentage >= 90) grade = '⭐⭐⭐⭐⭐ Відмінно!';
                 else if (percentage >= 75) grade = '⭐⭐⭐⭐ Добре';
@@ -798,12 +854,7 @@
 
                 let history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
                 history.push(result);
-                
-                // Зберігаємо тільки останні 10 результатів
-                if (history.length > 10) {
-                    history = history.slice(-10);
-                }
-                
+                if (history.length > 10) history = history.slice(-10);
                 localStorage.setItem('quizHistory', JSON.stringify(history));
             }
 
@@ -823,7 +874,6 @@
                         </div>
                     `).reverse().join('');
                 }
-
                 historyContainer.classList.remove('hidden');
             }
 
