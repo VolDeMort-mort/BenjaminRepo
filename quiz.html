@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Основи JavaScript: змінні, типи даних, оператори</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+    <link href="css/quiz.css" rel="stylesheet">
+</head>
+<body>
+    <script src="quiz.js"></script>
+    <div class="container">
+        <header>
+            <div class="student-info">
+                <p><strong>Група:</strong> <span id="studentGroup">-</span></p>
+                <p><strong>ПІБ:</strong> <span id="studentName">-</span></p>
+            </div>
+            <h1>Основи JavaScript: змінні, типи даних, оператори</h1>
+            <!-- <p>Інтерактивний тест для перевірки знань з JavaScript</p> -->
+        </header>
+
+        <div class="content">
+            <!-- Форма входу -->
+            <div id="loginScreen" class="login-form">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #2c3e50;">Вітаємо!</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="name">Ваше ім'я та прізвище *</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            required 
+                            placeholder="Введіть ваше повне ім'я"
+                            pattern="[А-Яа-яІіЇїЄєҐґA-Za-z\s]{5,50}"
+                            title="Введіть ім'я та прізвище (мінімум 5 символів)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="group">Група *</label>
+                        <input 
+                            type="text" 
+                            id="group" 
+                            required 
+                            placeholder="Наприклад: ІО-01"
+                            pattern="[А-Яа-яA-Za-z]{2,5}-\d{2}"
+                            title="Формат: ІО-01">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Почати тест</button>
+                </form>
+            </div>
+
+            <!-- Вибір рівня -->
+            <div id="levelScreen" class="level-selection hidden">
+                <h2 style="text-align: center; margin-bottom: 20px; color: #2c3e50;">Оберіть рівень складності</h2>
+                <div class="level-buttons">
+                    <div class="level-btn level-easy" data-level="easy">
+                        <h3>Початковий</h3>
+                        <p>10 питань базового рівня</p>
+                        <p><strong>10 балів за питання</strong></p>
+                    </div>
+                    <div class="level-btn level-medium" data-level="medium">
+                        <h3>Середній</h3>
+                        <p>10 питань середньої складності</p>
+                        <p><strong>15 балів за питання</strong></p>
+                    </div>
+                    <div class="level-btn level-hard" data-level="hard">
+                        <h3>Складний</h3>
+                        <p>10 питань високої складності</p>
+                        <p><strong>20 балів за питання</strong></p>
+                    </div>
+                    <button class="btn btn-primary" id="backToSite">Повернутись на сайт</button>
+
+                </div>
+            </div>
+
+            <!-- Екран тесту -->
+            <div id="quizScreen" class="hidden">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                
+                <div class="quiz-info">
+                    <span><strong>Рівень:</strong> <span id="currentLevel"></span></span>
+                    <span><strong>Питання:</strong> <span id="questionCounter">1/10</span></span>
+                    <span><strong>Бали:</strong> <span id="currentScore">0</span></span>
+                </div>
+
+                <div id="questionsContainer"></div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" id="prevBtn">← Попереднє</button>
+                    <button class="btn btn-primary" id="nextBtn">Наступне →</button>
+                    <button class="btn btn-success hidden" id="submitBtn">Завершити тест ✓</button>
+                </div>
+            </div>
+
+            <!-- Результати -->
+            <div id="resultsScreen" class="results hidden">
+                <h2 style="color: #2c3e50; margin-bottom: 20px;">Результати тесту</h2>
+                
+                <div class="score-circle">
+                    <div class="score-number" id="finalScore">0</div>
+                    <div class="score-label">балів</div>
+                </div>
+
+                <div class="results-details">
+                    <div class="detail-row">
+                        <span><strong>Студент:</strong></span>
+                        <span id="resultName"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span><strong>Група:</strong></span>
+                        <span id="resultGroup"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span><strong>Рівень:</strong></span>
+                        <span id="resultLevel"></span>
+                    </div>
+                    <div class="detail-row">
+                        <span><strong>Правильних відповідей:</strong></span>
+                        <span id="correctAnswers">0/10</span>
+                    </div>
+                    <div class="detail-row">
+                        <span><strong>Відсоток виконання:</strong></span>
+                        <span id="percentage">0%</span>
+                    </div>
+                    <div class="detail-row">
+                        <span><strong>Оцінка:</strong></span>
+                        <span id="grade" style="font-size: 1.5rem; font-weight: bold;"></span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="retryBtn">Пройти знову</button>
+                    <button class="btn btn-success" id="viewHistoryBtn">Історія результатів</button>
+                </div>
+
+                <div id="historyContainer" class="hidden" style="margin-top: 30px;">
+                    <h3 style="color: #2c3e50; margin-bottom: 15px;">Історія результатів</h3>
+                    <div id="historyList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
