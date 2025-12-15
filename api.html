@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин - каталог товарів</title>
+    <link rel="stylesheet" href="./css/css.css">
+    <link rel="stylesheet" href="./css/api.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="navbar">
+        <h1>Каталог товарів</h1>
+        <nav>
+            <a href="index.html">ГОЛОВНА</a>
+            <a href="index.html#biography">БІОГРАФІЯ</a>
+            <a href="contacts.html">КОНТАКТИ</a>
+            <a href="quiz.html">ТЕСТ JS</a>
+            <a href="api.html" style="background-color: #3498db; color: white;">ТОВАРИ</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-banner">
+            <h2>Каталог товарів</h2>
+            <p style="text-align: center;">Демонстрація фільтрації та сортування даних з DummyJSON API</p>
+        </section>
+
+        <hr>
+
+        <section class="controls-panel">
+            <div class="control-group">
+                <label for="category-filter">📂 Категорія:</label>
+                <select id="category-filter">
+                    <option value="all">Всі категорії</option>
+                    </select>
+            </div>
+
+            <div class="control-group">
+                <label for="price-sort">💰 Сортування:</label>
+                <select id="price-sort">
+                    <option value="default">За замовчуванням</option>
+                    <option value="asc">Від дешевих до дорогих</option>
+                    <option value="desc">Від дорогих до дешевих</option>
+                </select>
+            </div>
+        </section>
+
+        <section id="products-grid" class="products-grid">
+            <div class="loading-state">Завантаження товарів...</div>
+        </section>
+    </main>
+
+    <footer>
+        <h6><span>© Київ 2025</span></h6>
+        <h6><span>Shop</span></h6>
+        <h6><span>E-commerce Variant</span></h6>
+    </footer>
+
+    <script src="api.js">
+
+    </script>
+</body>
+</html>
