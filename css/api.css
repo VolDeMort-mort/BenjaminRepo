@@ -1,0 +1,142 @@
+/* Панель керування */
+.controls-panel {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-group label {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.control-group select {
+    padding: 8px 15px;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    font-family: 'Pangolin', sans-serif;
+    outline: none;
+    cursor: pointer;
+    background: white;
+}
+
+/* Сітка товарів */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Адаптивна сітка */
+    gap: 25px;
+    padding: 10px;
+}
+
+/* Картка товару */
+.product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Зображення */
+.image-container {
+    height: 200px;
+    background: #fff;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
+}
+
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Картинка повністю влазить, не обрізається */
+}
+
+/* Тіло картки */
+.card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.category-badge {
+    background: #e1f5fe;
+    color: #0288d1;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    align-self: flex-start;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.product-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    flex-grow: 1; /* Притискає ціну до низу */
+}
+
+/* Ціна та кнопка */
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.price {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.buy-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Pangolin', sans-serif;
+    transition: background 0.3s;
+}
+
+.buy-btn:hover {
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+}
+
+.loading-state, .error {
+    text-align: center;
+    grid-column: 1 / -1;
+    font-size: 1.2rem;
+    padding: 40px;
+}
+
+.error {
+    color: #e74c3c;
+}
